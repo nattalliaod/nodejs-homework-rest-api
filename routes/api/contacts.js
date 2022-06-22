@@ -4,23 +4,23 @@ const router = express.Router();
 const {
   getContacts,
   getContactById,
-  addContact,
+  createContact,
   removeContact,
   updateContact,
-  updateOneFieldContact
+  updateStatusContact
 } = require('../../controllers/contacts');
 
-const { validateBody } = require('../../middlewares/validateBody');
-const { schemaAddContact, schemaUpdateContact} = require('./contactsValidationShemes');
+const { validateBody, validateParams, controllerWrapper} = require('../../middlewares');
+const { schemaContactJoi, schemaFavoriteContact, schemaMongoId} = require('../../schemas/contact');
 
 router
-  .get('/', getContacts)
-  .post('/', validateBody(schemaAddContact), addContact);
+  .get('/', controllerWrapper(getContacts))
+  .post('/', validateBody(schemaContactJoi), controllerWrapper(createContact));
 
 router
-  .get('/:contactId', getContactById)
-  .delete('/:contactId', removeContact)
-  .put('/:contactId', validateBody(schemaUpdateContact), updateContact)
-  .patch('/:contactId', validateBody(schemaUpdateContact), updateOneFieldContact);
+  .get('/:contactId', validateParams(schemaMongoId), controllerWrapper(getContactById))
+  .delete('/:contactId', validateParams(schemaMongoId) , controllerWrapper(removeContact))
+  .put('/:contactId', [validateBody(schemaContactJoi), validateParams(schemaMongoId)], controllerWrapper(updateContact))
+  .patch('/:contactId/favorite', [validateBody(schemaFavoriteContact), validateParams(schemaMongoId)], controllerWrapper(updateStatusContact));
 
 module.exports = router;
