@@ -1,22 +1,16 @@
-const { createContact } = require('../../repository/contacts');
+const contactsService = require('../../services/contacts');
 const HTTP_STATUS_CODE = require('../../libs/constants')
 
-const addContact = async (req, res, next) => {
-  try {
-    const { body } = req;
-    const contact = await createContact(body);
-
-    if (!body.phone || !body.name || !body.email) {
-      return res
-        .status(HTTP_STATUS_CODE.BAD_REQUEST)
-        .json({ status: 'error', code: HTTP_STATUS_CODE.BAD_REQUEST, message: '"Missing required name field"' });
-    }
-    
-    return res.status(HTTP_STATUS_CODE.CREATED).json({ status: 'success', code: HTTP_STATUS_CODE.CREATED, payload: { contact } });
+const addContact = async (req, res) => {
+  const { body, user } = req;
   
-  } catch (error) {
-    next(error);
-  }
+  const contact = await contactsService.create(body, user);
+    
+    res.status(HTTP_STATUS_CODE.CREATED).json({
+      status: 'success',
+      code: HTTP_STATUS_CODE.CREATED,
+      payload: { contact }
+    });
 }
 
 module.exports = addContact;

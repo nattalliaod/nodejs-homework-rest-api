@@ -1,25 +1,17 @@
-const { getContactById } = require('../../repository/contacts');
+const contactsService = require('../../services/contacts');
 const HTTP_STATUS_CODE = require('../../libs/constants');
 
-const gettingContactById = async (req, res, next) => {
-    try {
-        const { contactId } = req.params;
-        const contact = await getContactById(contactId);
-  
-        if (!contact) {
-          return res
-              .status(HTTP_STATUS_CODE.NOT_FOUND)
-              .json({ status: 'error', code: HTTP_STATUS_CODE.NOT_FOUND, message: 'Not found' });
-        }
+const getContactById = async (req, res) => {
+    const { contactId } = req.params;
+    const { user } = req;
 
+        const contact = await contactsService.getById(contactId, user);
+        
         return res.json({
         status: 'success',
         code: HTTP_STATUS_CODE.OK,
         payload: { contact }
         }); 
-    } catch (error) {
-        next(error);
-    }
 }
 
-module.exports = gettingContactById;
+module.exports = getContactById;
