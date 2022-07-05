@@ -1,15 +1,18 @@
-const { listContacts } = require('../../repository/contacts');
+// const { listContacts } = require('../../repository/contacts');
+const contactsService = require('../../services/contacts');
 const HTTP_STATUS_CODE = require('../../libs/constants');
 
-const getContacts = async (req, res, next) => {
-  try {
-    const contacts = await listContacts();
-    res.json({ status: 'success', code: HTTP_STATUS_CODE.OK, payload: { contacts } });
+const getContacts = async (req, res) => {
+  const { user, query } = req;
+
+  const contacts = await contactsService.getAll( query, user);
   
-  } catch (error) {
-    next(error);
-  }
-}
+  res.json({
+    status: 'success',
+    code: HTTP_STATUS_CODE.OK,
+    payload: { ...contacts }
+  });
+ }
 
 module.exports = getContacts;
 
