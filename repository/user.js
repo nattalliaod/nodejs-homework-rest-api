@@ -17,9 +17,14 @@ const updateToken = async (id, token) => {
     return await User.findByIdAndUpdate(id, { token });// updateOne
 }
 
+const updateAvatar = async (id, avatarURL, cloudId = null) => {
+    return await User.findByIdAndUpdate(id, { avatarURL, cloudId });
+}
+
 module.exports = {
     findById,
     findByEmail,
     create,
-    updateToken
+    updateToken,
+    updateAvatar
 }

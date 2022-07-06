@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { findById } = require('../repository/user');
-const HTTP_STATUS_CODE = require('../libs/constants');
+const { HTTP_STATUS_CODE } = require('../libs/constants');
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 

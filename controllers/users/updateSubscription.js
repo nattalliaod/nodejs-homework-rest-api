@@ -1,10 +1,10 @@
 const { CustomError } = require('../../middlewares/errorHandler');
 const { User } = require('../../models');
-const HTTP_STATUS_CODE = require('../../libs/constants');
+const { HTTP_STATUS_CODE } = require('../../libs/constants');
 
 const subscription = async (req, res, next) => {
   const { subscription } = req.body;
-  const { userId: id } = req.params;
+  const { _id: id } = req.user;
 
   try {
     const user = await User.findById(id);

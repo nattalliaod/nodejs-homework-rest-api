@@ -1,5 +1,5 @@
 const rateLimit = require('express-rate-limit');
-const HTTP_STATUS_CODE = require('../libs/constants');
+const { HTTP_STATUS_CODE } = require('../libs/constants');
 
 const limiter = (duration, limit) => {
   return rateLimit({

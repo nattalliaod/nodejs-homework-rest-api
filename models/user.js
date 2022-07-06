@@ -1,38 +1,47 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
-Joi.objectId = require('joi-objectid')(Joi);
 const bcrypt = require('bcryptjs');
-
+const gravatar = require('gravatar');
 const { emailPattern } = require('../libs/regex');
 
 const userSchema = new Schema({
-    name: {
-        type: String,
-        default: 'Guest',
-    },
-    password: {
-        type: String,
-        required: [true, 'Password is required'],
-    },
-    email: {
-        type: String,
-        required: [true, 'Email is required'],
-        unique: true,
-        validate(value) {
-            return emailPattern.test(String(value).toLowerCase())
-        }
-    },
-    subscription: {
-        type: String,
-        enum: ["starter", "pro", "business"],
-        default: "starter"
-    },
-    token: {
-        type: String,
-        default: null,
-    },
+  name: {
+    type: String,
+    default: 'Guest',
+  },
+  password: {
+    type: String,
+    required: [true, 'Password is required'],
+  },
+  email: {
+    type: String,
+    required: [true, 'Email is required'],
+    unique: true,
+    validate(value) {
+      return emailPattern.test(String(value).toLowerCase())
+    }
+  },
+  subscription: {
+    type: String,
+    enum: ["starter", "pro", "business"],
+    default: "starter"
+  },
+  token: {
+    type: String,
+    default: null,
+  },
+  avatarURL: {
+    type: String,
+    default: function () {
+      return gravatar.url(this.email, { s: '250' }, true);
+    }
+  },
+  cloudId: {
+    type: String,
+    default: null
+  },
 },
-    { versionKey: false, timestamps: true },
+  { versionKey: false, timestamps: true },
 );
 
 userSchema.pre('save', function (next) {
@@ -65,7 +74,6 @@ const joiSignupSchema = Joi.object({
         "starter", "pro", "business",
       )}`,
     }),
-    // role: Joi.string().valid(Role).default(Role.USER),
 });
 
 const joiLoginSchema = Joi.object({
@@ -93,18 +101,11 @@ const joiUpdateSubscription = Joi.object({
     }),
 });
 
-const joiUserId = Joi.object({
-  userId: Joi.objectId()
-    .required()
-    .messages({ 'any.required': 'Id is required' }),
-});
-
 const User = model('user', userSchema);
 
 module.exports = {
   User,
   joiSignupSchema,
   joiLoginSchema,
-  joiUserId,
   joiUpdateSubscription
 };
