@@ -1,5 +1,5 @@
 const authService = require('../../services/auth');
-const HTTP_STATUS_CODE = require('../../libs/constants');
+const { HTTP_STATUS_CODE } = require('../../libs/constants');
 
 const login = async (req, res) => {
   const payload = await authService.login(req.body)

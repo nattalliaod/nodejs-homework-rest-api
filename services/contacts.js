@@ -6,7 +6,7 @@ const {
     updateContact,
     updateStatusContact
 } = require('../repository/contacts');
-const HTTP_STATUS_CODE = require('../libs/constants');
+const { HTTP_STATUS_CODE } = require('../libs/constants');
 const { CustomError } = require('../middlewares/errorHandler');
 
 class ContactsService {

@@ -1,5 +1,5 @@
 const contactsService = require('../../services/contacts');
-const HTTP_STATUS_CODE = require('../../libs/constants');
+const { HTTP_STATUS_CODE } = require('../../libs/constants');
 
 const updateContact = async (req, res, next) => {
   const { contactId } = req.params;

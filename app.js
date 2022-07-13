@@ -10,7 +10,7 @@ const contactsRouter = require('./routes/api/contacts');
 const authRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
 
-const HTTP_STATUS_CODE = require('./libs/constants')
+const { HTTP_STATUS_CODE } = require('./libs/constants');
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
@@ -19,6 +19,7 @@ app.use(rateLimit(15 * 60 * 100, 100));
 
 app.use(helmet());
 app.use(logger(formatsLogger));
+app.use(express.static(process.env.STATIC_FOLDER));
 app.use(cors());
 app.use(express.json({ limit: 10000 }));
 
