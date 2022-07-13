@@ -2,6 +2,7 @@ const { Schema, model } = require('mongoose');
 const Joi = require('joi');
 const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
+const { randomUUID } = require('crypto');
 const { emailPattern } = require('../libs/regex');
 
 const userSchema = new Schema({
@@ -39,6 +40,14 @@ const userSchema = new Schema({
   cloudId: {
     type: String,
     default: null
+  },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationEmailToken: {
+    type: String,
+    default: randomUUID(),
   },
 },
   { versionKey: false, timestamps: true },

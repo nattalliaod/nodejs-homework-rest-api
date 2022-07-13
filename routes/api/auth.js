@@ -12,6 +12,10 @@ const { rateLimit } = require('../../middlewares');
 
 router.post('/signup', rateLimit(15 * 60 * 100, 2), validateBody(joiSignupSchema), wrapperError(ctrl.signup));
 router.post('/login', validateBody(joiLoginSchema), wrapperError(ctrl.login));
+
+router.get('/verify-email/:token', wrapperError(ctrl.verifyUser));
+router.post('/verify-email', wrapperError(ctrl.reverifyEmail));
+
 router.post('/logout', guard, wrapperError(ctrl.logout));
 
 module.exports = router;
